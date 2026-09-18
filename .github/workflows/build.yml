@@ -1,0 +1,26 @@
+name: Build KittyAdmin
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore
+        run: msbuild KittyAdmin.csproj /t:Restore /p:Configuration=Release
+
+      - name: Build
+        run: msbuild KittyAdmin.csproj /p:Configuration=Release
+
+      - name: Upload plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: KittyAdmin
+          path: bin/Release/net461/KittyAdmin.dll
